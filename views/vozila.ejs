@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Rent a Car</title>
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+</head>
+<%- include('partials/navbar.ejs'); %>
+
+<body>
+  <main role="main">
+    <div class="container">
+      <section class="jumbotron text-center">
+        <div class="container">
+          <h1 style="letter-spacing: 10px; text-transform: uppercase;">Vozila</h1>
+          <p class="lead text-muted">Vidite vozila raspoređena po ceni: </p>
+          <div class="btn-group">
+            <a class="btn btn-outline-info" href="/vozila/cena/rastuca"> Rastuća </a>
+            <a class="btn btn-outline-info" href="/vozila/cena/opadajuca"> Opadajuća </a>
+            <a class="btn btn-outline-info" href="/vozila"> Bez filtera</a>
+          </div>
+        </div>
+        <%if(currentUser && currentUser.tip=='admin') {%>
+        <br>
+        <a class="btn btn-info" href="/vozila/new"> Dodaj novo vozilo</a>
+        <% } %>
+      </section>
+    </div>
+    <%- include('partials/messages.ejs'); %>
+    <div class="album py-5 bg-light">
+      <div class="container">
+        <div class="row">
+          <% vozila.forEach(vozilo=>{ %>
+          <div class="col-lg-3 col-md-3 col-sm-3">
+            <div class="card mb-4 shadow">
+              <img class="bd-placeholder-img card-img-top" width="100%" height="225" src="<%=vozilo.slika%> "
+                preserveAspectRatio="xMidYMid slice">
+              <div class="card-body">
+                <p class="card-text"> <%=vozilo.marka %> </p>
+                <p class="card-text text-muted"> <%=vozilo.opis %> </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group profile-userbuttons">
+                    <a type="button" class="btn btn-sm btn-outline-info" href="/vozila/<%=vozilo.vid%>">Vidi</a>
+                    <% if(currentUser && currentUser.tip=='admin') { %>
+                    <button class="btn btn-sm btn-outline-dark" data-toggle="modal" data-target="#myModal<%= vozilo.vid %>" >Obriši</button>
+                    <a type="button" class="btn btn-sm btn-outline-info" href="/vozila/<%=vozilo.vid%>/edit">Izmeni</a>
+                    <% } %>
+                  </div class="text-right">
+                  <small class="text-muted"> <%=vozilo.cena %>RSD/dan </small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+      <footer class="text-muted">
+        <div class="container">
+          <p class="float-right">
+            <a style="color: #5bc0de;" href="/vozila">Vrati se nazad</a>
+          </p>
+        </div>
+      </footer>
+  </main>
+  
+  <% vozila.forEach(vozilo=>{ %>
+    <div class="modal" id="myModal<%= vozilo.vid %>" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Brisanje vozila</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <p>Da li ste sigurni da zelite da obrišete vozilo?</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Odustani</button>
+                  <form action="/vozila/<%=vozilo.vid%>/delete?_method=DELETE" method="POST" class="delete-form">
+                    <button class="btn btn-info">Obriši</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  <% }) %>
+
+  <%- include ('partials/footer.ejs'); %>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Rent a car</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+
+<body>
+<main>
+    <%- include('partials/navbar.ejs'); %>
+    <%- include('partials/messages.ejs'); %>
+    <div class="container">
+    <div class="vozilo shadow d-flex flex-column " style="background-color: rgb(240, 240, 240);">    
+        <div class="col-md-9 align-self-center">
+            <br>
+        <h1>Informacije o korisniku</h1>
+            <table class="table table-dark table-striped table-hover table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col" class="text-left">Ime</th>
+                        <th scope="col" class="text-left">E-mail</th>
+                        <th scope="col" class="text-left">Adresa</th>
+                        <th scope="col" class="text-left">Broj telefona</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row"></th>
+                        <td>
+                            <%= korisnik.ime %>
+                        </td>
+                        
+                        <td scope="col"> 
+                            <%= korisnik.email%>
+                        </td>
+
+                        <td scope="col"> 
+                            <%= korisnik.adresa%>
+                        </td>
+
+                        <td scope="col"> 
+                            <%= korisnik.broj_telefona%>
+                        </td>
+                        
+                    </tr>
+                    
+                </tbody>
+            </table>
+
+            <div >
+                
+                <a type="submit" class="btn btn-info btn-block" href="/korisnik/<%=korisnik.email%>/edit">Izmeni informacije</a>
+        </div>
+        </div>
+
+        <div class="col-md-9 align-self-center">
+            <br>
+            <br>
+            <hr>          
+            <h1>Prethodne rezervacije</h1>
+                <table class="table table-dark table-striped table-hover table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col" class="text-left">Datum pocetka rezervacije</th>
+                            <th scope="col" class="text-left">Datum kraja rezervacije</th>
+                            <th scope="col" class="text-left"></th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    
+                        <% rezervacije.forEach(function(rez){ %>
+                        <tr>
+                            <th scope="row"></th>
+                            <td>
+                                <%=rez.datumpocetka%>
+                            </td>
+                            
+                            <td scope="col"> 
+                                <%=rez.datumkraja%>
+                            
+                            </td>
+                            <td>
+                                <button class="btn  btn-outline-danger "style="border-radius: 30px; letter-spacing: 2px " data-toggle="modal" data-target="#myModal<%= rez.rid %>" >Obriši</button>
+                          
+                            </td>
+                            
+                        </tr>
+                        <% }) %>
+                        
+                        
+                    </tbody>
+                </table>
+                <br>
+                <br>
+        </div>
+</main>
+
+
+  <% rezervacije.forEach(rez=>{ %>
+    <div class="modal" id="myModal<%= rez.rid %>" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Brisanje rezervacije</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <p>Da li ste sigurni da zelite da obrišete rezervaciju?</p>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-dark" data-dismiss="modal">Odustani</button>
+                  <form action="/rezervacija/<%=currentUser.email%>/<%=rez.voziloid%>/<%=rez.datumpocetka%>/delete?_method=DELETE" method="POST" class="delete-form">
+                    <button class="btn btn-info">Obriši</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  <% }) %>
+
+    <%- include ('partials/footer.ejs'); %>

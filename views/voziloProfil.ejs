@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Rent a car</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+
+<body>
+    <main>
+        <%- include('partials/navbar.ejs'); %>
+            <%- include('partials/messages.ejs'); %>
+                <div class="container">
+                    <div class="row vozilo shadow" style="background-color: rgb(240, 240, 240);">
+                        <div class="col-md-4">
+                            <div class="vozilo-sidebar" style="background-color: rgb(240, 240, 240);">
+                                <div class="vozilo-userpic">
+                                    <br>
+                                    <br>
+                                    <img src="<%=vozilo.slika%>" class="img-responsive" alt="">
+                                </div>
+                                <div class="vozilo-usertitle">
+                                    <div class="vozilo-usertitle-name">
+                                        <p>
+                                            <%= vozilo.marka%>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8 ">
+                            <div class="vozilo-content">
+                                <br>
+                                <br>
+                                <table class="table table-sm table-striped table-hover table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">Informacije o vozilu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Marka</td>
+                                            <td>
+                                                <%= vozilo.marka %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Model</td>
+                                            <td>
+                                                <%= vozilo.model %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Gorivo</td>
+                                            <td>
+                                                <%= vozilo.gorivo %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Opis</td>
+                                            <td>
+                                                <%= vozilo.opis %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Registracija</td>
+                                            <td>
+                                                <%= vozilo.registracija %>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tip</td>
+                                            <td>
+                                                <%= vozilo.tip %>
+                                            </td>
+                                        </tr>
+                                </table>
+                            </div>
+                            <br>
+                            <br>
+                        </div>
+
+                        <div class="container">
+                            <hr>
+                            <br>
+                            <div class="row d-flex justify-content-around">
+                                <h1>Rezervacija vozila</h1>
+                                <h1>Prethodne rezervacije</h1>
+                            </div>
+                            <div class="row mt-3 align-items-left">
+                                <div class="col-md-5 m-auto align-items-left">
+                                    <div class="card card-body align-items-left">
+                                    <form action="/rezervacija/new/<%=vozilo.vid%>/<%=currentUser.uid%>" method="POST">
+                                        <div class="form-group">
+                                            <label for="datumpocetka">Datum početka rezervacije</label>
+                                            <input type="date" id="datumpocetka" name="datumpocetka" class="form-control"/>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="datumkraja">Datum kraja rezervacije</label>
+                                            <input type="date" id="datumkraja" name="datumkraja" class="form-control"/>
+                                        </div>
+                                        <button type="submit" class="btn btn-info btn-block">Potvrdi</button>
+                                    </form>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-md-7">
+                                    <table class="table table-dark table-striped table-hover table-dark">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"></th>
+                                                <th scope="col" class="text-left">Datum početka rezervacije</th>
+                                                <th scope="col" class="text-left">Datum kraja rezervacije</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% var i=0 %>
+                                                <% rezervacija.forEach (function (rezervacija){ %>
+                                                    <% i++ %>
+                                                        <tr>
+                                                            <th scope="row">
+                                                                <%=i%>
+                                                            </th>
+                                                            <td>
+                                                                <%= rezervacija.datumpocetka %>
+                                                            </td>
+                                                            <td scope="col">
+                                                                <%= rezervacija.datumkraja%>
+                                                            </td>
+                                                        </tr>
+                                                    <% }) %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+    </main>
+
+    <%- include ('partials/footer.ejs'); %>
